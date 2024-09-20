@@ -5,4 +5,5 @@ if __name__ == "__main__":
     while True:
         data = server.receive()
         if data:
-            print("[Client]:", data)
+            print("[Client]:", data.concentrationScore)
+            print("[Client]:", data.individualPeakFrequency)
