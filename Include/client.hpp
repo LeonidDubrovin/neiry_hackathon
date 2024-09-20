@@ -39,12 +39,7 @@ public:
 
     void Init(const std::string& ip, int port);
 
-    void SendString(const std::string& message);
-
     void SendData(const Data& data);
-//  void SendImage(cv::Mat img);
-
-    std::string Receive();
 
 private:
     int client_;
