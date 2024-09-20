@@ -4,39 +4,39 @@
 
 namespace socket_communication {
 namespace {
-    bool TestWinsock()
-    {
-        // Initialize Winsock
-        WSADATA wsaData;
-        int iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
-        if (iResult != NO_ERROR) {
-            printf("WSAStartup failed: %d\n", iResult);
-            return false;
-        }
-        return true;
+bool TestWinsock()
+{
+    // Initialize Winsock
+    WSADATA wsaData;
+    int iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if (iResult != NO_ERROR) {
+        printf("WSAStartup failed: %d\n", iResult);
+        return false;
     }
-
-    void SerializeData(const Data& data, char* buffer, size_t& buffer_size) {
-        size_t buff_curr_size = 0;
-
-        memcpy(buffer + buff_curr_size, &data.fatigueScore, sizeof(float));
-        buff_curr_size += sizeof(float);
-
-        memcpy(buffer + buff_curr_size, &data.gravityScore, sizeof(float));
-        buff_curr_size += sizeof(float);
-
-        memcpy(buffer + buff_curr_size, &data.concentrationScore, sizeof(float));
-        buff_curr_size += sizeof(float);
-
-        memcpy(buffer + buff_curr_size, &data.accumulatedFatigue, sizeof(float));
-        buff_curr_size += sizeof(float);
-
-        memcpy(buffer + buff_curr_size, &data.individualPeakFrequency, sizeof(float));
-        buff_curr_size += sizeof(float);
-
-        buffer_size = buff_curr_size;
-    }
+    return true;
 }
+
+void SerializeData(const Data& data, char* buffer, size_t& buffer_size) {
+    size_t buff_curr_size = 0;
+
+    memcpy(buffer + buff_curr_size, &data.fatigueScore, sizeof(float));
+    buff_curr_size += sizeof(float);
+
+    memcpy(buffer + buff_curr_size, &data.gravityScore, sizeof(float));
+    buff_curr_size += sizeof(float);
+
+    memcpy(buffer + buff_curr_size, &data.concentrationScore, sizeof(float));
+    buff_curr_size += sizeof(float);
+
+    memcpy(buffer + buff_curr_size, &data.accumulatedFatigue, sizeof(float));
+    buff_curr_size += sizeof(float);
+
+    memcpy(buffer + buff_curr_size, &data.individualPeakFrequency, sizeof(float));
+    buff_curr_size += sizeof(float);
+
+    buffer_size = buff_curr_size;
+}
+} // namespace
 
 Client::Client()
 {}
