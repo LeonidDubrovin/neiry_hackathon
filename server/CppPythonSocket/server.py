@@ -58,8 +58,7 @@ class Server:
                 return None
             data += packet
 
-        data = Data(*struct.unpack('ifI', data))
-        print(f'Получено от клиента: int: {data.intValue}, float: {data.floatValue}, строка: {data.stringLen}')
+        data = Data(*struct.unpack(STRUCT_FORMAT, data))
         return data
 
     def clear_buffer(self):
