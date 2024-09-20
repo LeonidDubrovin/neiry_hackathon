@@ -7,6 +7,7 @@
 #include "ExampleUtils.hpp"
 
 #include "CClientAPI.h"
+#include <client.hpp>
 
 using namespace std::chrono_literals;
 
@@ -34,6 +35,10 @@ bool clientDisconnecting = false;
 
 // License key
 std::string licenseKey;
+
+
+std::shared_ptr<socket_communication::Client> socketClient;
+
 
 void onResistances([[maybe_unused]] clCDevice device, clCResistances resistances) {
     // Get total number of resistance channels.
@@ -89,6 +94,13 @@ void onProductivityValuesUpdate(clCNFBMetricProductivity, const clCNFBMetricsPro
               << "\tRelaxation Score: " << values->relaxationScore << '\n'
               << "\tAccumulated Fatigue: " << values->accumulatedFatigue << '\n'
               << "\tFatigue Growth Rate: " << values->fatigueGrowthRate << std::endl;
+
+    socket_communication::Data data{};
+    data.fatigueScore = values->fatigueScore;
+    data.gravityScore = values->gravityScore;
+    data.concentrationScore = values->concentrationScore;
+    data.accumulatedFatigue = values->accumulatedFatigue;
+    socketClient->SendData(data);
 }
 
 void onCardioIndexesUpdate([[maybe_unused]] clCCardio cardio, clCCardioData data) {
@@ -127,7 +139,11 @@ void onCalibrated(clCNFBCalibrator, const clCIndividualNFBData* data, clCIndivid
         clientStopRequested = true;
         return;
     }
-    std::cout << "Calibration suceeded. IAF:" << data->individualFrequency << std::endl;
+//    std::cout << "Calibration suceeded. IAF:" << data->individualFrequency << std::endl;
+
+    socket_communication::Data dataForSand{};
+    dataForSand.individualPeakFrequency = data->individualPeakFrequency;
+    socketClient->SendData(dataForSand);
 }
 
 void onCalibratorReady(clCNFBCalibrator calibrator) {
@@ -441,6 +457,8 @@ int main(int argc, char* argv[]) {
         std::cout << "Client name: " << clCString_CStr(strPtr) << std::endl;
         clCString_Free(strPtr);
     }
+
+    socketClient = std::make_shared<socket_communication::Client>("127.0.0.1", 5003);
 
     auto future = std::async(std::launch::async, ClientLoop);
     char input;
