@@ -461,7 +461,7 @@ int main(int argc, char* argv[]) {
         clCString_Free(strPtr);
     }
 
-    socketClient = std::make_shared<socket_communication::Client>("127.0.0.1", 5003);
+    socketClient = std::make_shared<socket_communication::Client>("127.0.0.1", 5004);
 
     auto future = std::async(std::launch::async, ClientLoop);
     char input;
