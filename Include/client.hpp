@@ -25,11 +25,11 @@ namespace
 }
 
 struct Data {
-    Value<float> fatigueScore{0, 1 << 0};
-    Value<float> gravityScore{0, 1 << 1};
-    Value<float> concentrationScore{0, 1 << 2};
-    Value<float> accumulatedFatigue{0, 1 << 3};
-    Value<float> individualPeakFrequency{0, 1 << 4};
+    Value<float> fatigueScore{0, 0x01};
+    Value<float> gravityScore{0, 0x02};
+    Value<float> concentrationScore{0, 0x04};
+    Value<float> accumulatedFatigue{0, 0x08};
+    Value<float> individualPeakFrequency{0, 0x16};
 };
 
 class Client
