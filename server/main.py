@@ -4,7 +4,7 @@ import struct
 
 
 class Data:
-    struct_format: str
+    struct_format: str = 'Ifffff'
 
     def __init__(self, field_flags, fatigue_score, gravity_score, concentration_score, accumulated_fatigue, individual_peak_frequency):
         self.field_flags = field_flags
@@ -13,7 +13,6 @@ class Data:
         self.concentration_score = concentration_score
         self.accumulated_fatigue = accumulated_fatigue
         self.individual_peak_frequency = individual_peak_frequency
-        self.struct_format = 'Ifffff'
 
     def get_fatigue_score(self):
         if self.field_flags & 0x01:
