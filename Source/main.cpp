@@ -96,11 +96,13 @@ void onProductivityValuesUpdate(clCNFBMetricProductivity, const clCNFBMetricsPro
               << "\tFatigue Growth Rate: " << values->fatigueGrowthRate << std::endl;
 
     socket_communication::Data data{};
-    data.fatigueScore = values->fatigueScore;
-    data.gravityScore = values->gravityScore;
-    data.concentrationScore = values->concentrationScore;
-    data.accumulatedFatigue = values->accumulatedFatigue;
-    socketClient->SendData(data);
+    data.fatigueScore.value = values->fatigueScore;
+    data.gravityScore.value = values->gravityScore;
+    data.concentrationScore.value = values->concentrationScore;
+    data.accumulatedFatigue.value = values->accumulatedFatigue;
+
+    uint32_t field_flags = data.fatigueScore.code | data.gravityScore.code | data.concentrationScore.code | data.accumulatedFatigue.code;
+    socketClient->SendData(data, field_flags);
 }
 
 void onCardioIndexesUpdate([[maybe_unused]] clCCardio cardio, clCCardioData data) {
@@ -141,9 +143,10 @@ void onCalibrated(clCNFBCalibrator, const clCIndividualNFBData* data, clCIndivid
     }
 //    std::cout << "Calibration suceeded. IAF:" << data->individualFrequency << std::endl;
 
-    socket_communication::Data dataForSand{};
-    dataForSand.individualPeakFrequency = data->individualPeakFrequency;
-    socketClient->SendData(dataForSand);
+    socket_communication::Data dataForSend{};
+    dataForSend.individualPeakFrequency.value = data->individualPeakFrequency;
+    uint32_t field_flags = dataForSend.individualPeakFrequency.code;
+    socketClient->SendData(dataForSend, field_flags);
 }
 
 void onCalibratorReady(clCNFBCalibrator calibrator) {
